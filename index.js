@@ -6,7 +6,9 @@ var async = require('async');
 var _ = require('lodash');
 var swaggerFormatter = require('./app/swagger-formatter');
 
-app.set('port', (process.env.PORT || 3000));
+port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
+ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+
 app.use(express.static(__dirname + '/app'));
 
 app.get('/spec', function(req, res) {
@@ -75,6 +77,6 @@ app.get('/spec/:masterKey/:apiKey', function(req, res) {
 	});
 });
 
-app.listen(app.get('port'), function() {
-  console.log("Node server running at http://localhost:" + app.get('port'));
-})
+app.listen(port, ip, function() {
+  console.log("Node server running at http://" + ip + ":" + port);
+});
