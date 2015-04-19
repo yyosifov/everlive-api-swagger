@@ -2,6 +2,14 @@
 
 This project provides an auto-generated Swagger API reference for your Everlive API. Just enter your API Key and Master Key and click explore.
 
+## Demo
+
+To test this out, use the deployed instance here:
+
+[http://yyosifov-everliveapi.rhcloud.com/](http://yyosifov-everliveapi.rhcloud.com/ "http://yyosifov-everliveapi.rhcloud.com/")
+
+Enter your api key, master key and click explore.
+
 ## Supported operations
 
 Currently this is the list of all supported operations:

@@ -6,8 +6,8 @@ var async = require('async');
 var _ = require('lodash');
 var swaggerFormatter = require('./app/swagger-formatter');
 
-port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
-ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
+var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 
 app.use(express.static(__dirname + '/app'));
 
