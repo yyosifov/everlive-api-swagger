@@ -1,34 +1,31 @@
-# Node JS + Angular JS + Require JS
+# Everlive API (Telerik Backend Services) Swagger Explorer
 
-This is a minimalistic application structure which has a Node server for serving the Angular JS site. External dependencies are managed using Require JS.
+This project provides an auto-generated Swagger API reference for your Everlive API. Just enter your API Key and Master Key and click explore.
 
-## Getting started
+## Supported operations
 
-The project depends on Git, Npm and Bower - have them installed in advance. Then run the following sequence of commands.
+Currently this is the list of all supported operations:
 
-    git clone https://github.com/yyosifov/angular-require-seed.git
-	cd angular-require-seed
+- GET
+
+## Running the project
+
+The project depends on Git and Npm - have them installed in advance. Then run the following sequence of commands.
+
+    git clone https://github.com/yyosifov/everlive-api-swagger.git
+	cd everlive-api-swagger
 	npm install
-	cd app
-	bower install 
+	
+Then run the server:
 
- Now you have all the source code and components available.
-
-### Run the Application
-
-To run the application:
-
-	cd angular-require-seed
 	node index.js
 
-After starting the Node JS server open the website at **http://localhost:3000/#/** which should render the main.html partial view.
+Now browse it at:
 
-## Directory Layout
+	http://localhost:3000 
 
-    index.js --> the Node JS server, used only for serving statically the website assets
-    app/ --> the web application resides here
-    	app.js --> setup of the angular application and modules
-    	main.js --> manually bootstrap the angular application, after configuring and loading the extenral modules with require js
-    	index.html --> the SPA application's page
-    	partials/
-    		main.html --> a partial view, rendered in <div ui-view> when accessing /#/ and matching the "/" route defined in the $stateProvider
+## More info
+
+To review the Everlive REST API read the official documentation:
+
+- [REST API](http://docs.telerik.com/platform/backend-services/development/rest-api/content/retrieve-items "REST API")
