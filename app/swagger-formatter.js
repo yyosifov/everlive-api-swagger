@@ -56,13 +56,13 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 		case 1:
 		return this.makeFieldType('string', 'string');
 		case 2:
-		return this.makeFieldType('number', 'double');
+		return this.makeFieldType('double', 'double');
 		case 3:
 		return this.makeFieldType('string', 'date-time');
 		case 4:
 		return this.makeFieldType('boolean', null);
 		default:
-		return this.makeFieldType('stringl', 'string');
+		return this.makeFieldType('string', 'string');
 	}
 };
 
@@ -169,13 +169,39 @@ SwaggerBuilder.prototype.withDefinitions = function() {
 				],
 				parameters: self.getQueryParameters(),
 				responses: {
-					"400": {
-						"description": "Invalid api key"
+					"200": {
+						description: type.Name + ' response',
+						schema: {
+							$ref: '#/definitions/' + type.Name
+						}
+					},
+					default: {
+						description: "error ocurred",
+						schema: {
+							$ref: '#/definitions/Error'
+						}
 					}
 				}
 			}
 		};
 	});
+
+	definitions['Error'] = {
+		required: [
+			'errorCode',
+			'message'
+		],
+		properties: {
+	        errorCode: {
+	          type: "integer",
+	          format: "int32"
+	        },
+	        message: {
+	          type: "string"
+	        }
+      	}
+	}
+
 	this.swagger.paths = paths;
 	this.swagger.definitions = definitions;
 	return this;
