@@ -51,23 +51,24 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 	SwaggerBuilder.prototype.getEverliveFieldProperty = function(field) {
 		log('gettin everlive field property for data type = ' + field.DataType);
 		var dataType = field.DataType;
-	//https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#data-types
-	switch(dataType) {
-		case 1:
-		return this.makeFieldType('string', 'string');
-		case 2:
-		return this.makeFieldType('double', 'double');
-		case 3:
-		return this.makeFieldType('string', 'date-time');
-		case 4:
-		return this.makeFieldType('boolean', null);
-		default:
-		return this.makeFieldType('string', 'string');
-	}
-};
 
-SwaggerBuilder.prototype.getQueryParameters = function() {
-	return [
+		//https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#data-types
+		switch(dataType) {
+			case 1:
+			return this.makeFieldType('string', 'string');
+			case 2:
+			return this.makeFieldType('double', 'double');
+			case 3:
+			return this.makeFieldType('string', 'date-time');
+			case 4:
+			return this.makeFieldType('boolean', null);
+			default:
+			return this.makeFieldType('string', 'string');
+		}
+	};
+
+	SwaggerBuilder.prototype.getQueryParameters = function() {
+		return [
 		{
 			"name": "filter",
 			"in": "query",
@@ -131,95 +132,159 @@ SwaggerBuilder.prototype.getQueryParameters = function() {
 			"required": false,
 			"type": "boolean"
 		}	
-	];
-};
+		];
+	};
 
-SwaggerBuilder.prototype.withDefinitions = function() {
-	log('with definitions');
-	var definitions = {};
-	var paths = {};
-	var self = this;
+	SwaggerBuilder.prototype.withDefinitions = function() {
+		log('with definitions');
+		var definitions = {};
+		var paths = {};
+		var self = this;
 
-	_.each(this.types, function(type) {
-		log('for type: ' + type.Name);
-		var properties = {};
+		_.each(this.types, function(type) {
+			log('for type: ' + type.Name);
+			var properties = {};
 
-		_.each(type.fields, function(field) {
-			log('set for field: ' + field.Name);
-			properties[ field.Name ] = self.getEverliveFieldProperty(field);
-		});
+			_.each(type.fields, function(field) {
+				log('set for field: ' + field.Name);
+				properties[ field.Name ] = self.getEverliveFieldProperty(field);
+			});
 
-		definitions[type.Name] = {
-			properties: properties
-		};
+			definitions[type.Name] = {
+				properties: properties
+			};
 
-		paths['/' + type.Name] = {
-			get: {
-				tags: [
-				type.Name
-				],
-				summary: 'Get ' + type.Name + ' items',
-				description: '',
-				operationId: 'get',
-				consumes: [
-				"application/json",
-				],
-				produces: [
-				"application/json"
-				],
-				parameters: self.getQueryParameters(),
-				responses: {
-					"200": {
-						description: type.Name + ' response',
-						schema: {
-							$ref: '#/definitions/' + type.Name
+			paths['/' + type.Name] = {
+				get: {
+					tags: [
+					type.Name
+					],
+					summary: 'Get ' + type.Name + ' items',
+					description: '',
+					operationId: 'get',
+					consumes: [
+					"application/json",
+					],
+					produces: [
+					"application/json"
+					],
+					parameters: self.getQueryParameters(),
+					responses: {
+						"200": {
+							description: type.Name + ' response',
+							schema: {
+								$ref: '#/definitions/' + type.Name
+							}
+						},
+						default: {
+							description: "error ocurred",
+							schema: {
+								$ref: '#/definitions/Error'
+							}
 						}
-					},
-					default: {
-						description: "error ocurred",
-						schema: {
-							$ref: '#/definitions/Error'
+					}
+				},
+				post: {
+					description: 'Creates a new ' + type.Name + ' item.',
+					produces: [
+						'application/json'
+					],
+					parameters: [
+						{
+							name: type.Name,
+							'in': 'body',
+							'description': 'to add',
+							'required': true,
+							schema: {
+								'$ref': '#/definitions/' + type.Name
+							}
+						}
+					],
+					responses: {
+						"201": {
+							description: type.Name + ' item created.',
+							schema: {
+								$ref: '#/definitions/CreateResult'
+							}
+						},
+						default: {
+							description: "error ocurred",
+							schema: {
+								$ref: '#/definitions/Error'
+							}
 						}
 					}
 				}
-			}
-		};
-	});
+			};
+		});
 
-	definitions['Error'] = {
-		required: [
+		definitions['Error'] = {
+			required: [
 			'errorCode',
 			'message'
-		],
-		properties: {
-	        errorCode: {
-	          type: "integer",
-	          format: "int32"
-	        },
-	        message: {
-	          type: "string"
-	        }
-      	}
-	}
+			],
+			properties: {
+				errorCode: {
+					type: "integer",
+					format: "int32"
+				},
+				message: {
+					type: "string"
+				}
+			}
+		};
 
-	this.swagger.paths = paths;
-	this.swagger.definitions = definitions;
-	return this;
-};
+		definitions['CreateResult'] = {
+			required: [
+				'Id',
+				'CreatedAt'
+			],
+			properties: {
+						Id: {
+					type: 'string'
+				},
+				CreatedAt: {
+					type: 'date-time'
+				}
 
-SwaggerBuilder.prototype.build = function() {
-	log('build');
-	return this.swagger;
-};
+				//		$ref: '#/definitions/CreateResultObject'
+				//}
+			}
+		};
 
-var format = function(types, apiKey) {
-	var swagger = new SwaggerBuilder(types, apiKey)
-	.withInfo()
-	.withEverliveServer()
-	.withDefinitions()
-	.build();
+		definitions['CreateResultObject'] = {
+			required: [
+				'Id',
+				'CreatedAt'
+			],
+			properties: {
+				Id: {
+					type: 'string'
+				},
+				CreatedAt: {
+					type: 'date-time'
+				}
+			}
+		};
 
-	return swagger;
-};
+		this.swagger.paths = paths;
+		this.swagger.definitions = definitions;
+		return this;
+	};
 
-exports.format = format;
+	SwaggerBuilder.prototype.build = function() {
+		log('build');
+		return this.swagger;
+	};
+
+	var format = function(types, apiKey) {
+		var swagger = new SwaggerBuilder(types, apiKey)
+		.withInfo()
+		.withEverliveServer()
+		.withDefinitions()
+		.build();
+
+		return swagger;
+	};
+
+	exports.format = format;
