@@ -240,19 +240,12 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 
 		definitions['CreateResult'] = {
 			required: [
-				'Id',
-				'CreatedAt'
+				'Result'
 			],
 			properties: {
-						Id: {
-					type: 'string'
-				},
-				CreatedAt: {
-					type: 'date-time'
+				Result: {
+					$ref: 'CreateResultObject'
 				}
-
-				//		$ref: '#/definitions/CreateResultObject'
-				//}
 			}
 		};
 
