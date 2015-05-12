@@ -255,7 +255,81 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 					}
 				}
 			};
+
+			paths['/' + type.Name + '/{id}'] = {
+				get: {
+					tags: [
+						type.Name
+					],
+					summary: 'Get ' + type.Name + ' item by Id',
+					description: '',
+					operationId: 'getById',
+					consumes: [
+					'application/json',
+					],
+					produces: [
+					'application/json'
+					],
+					'parameters': [
+			          {
+			            'name': 'id',
+			            'in': 'path',
+			            'description': 'ID of ' + type.Name + ' to fetch',
+			            'required': true,
+			            'type': 'string',
+			            'format': 'string'
+			          }
+			        ],
+					responses: {
+						'200': {
+							description: type.Name + ' response',
+							schema: {
+								$ref: '#/definitions/' + type.Name
+							}
+						},
+						default: {
+							description: 'error ocurred',
+							schema: {
+								$ref: '#/definitions/Error'
+							}
+						}
+					}
+				},
+				delete: {
+					tags: [
+						type.Name
+					],
+					description: 'Delete from ' + type.Name + ' by Id.',
+					operationId: 'deleteById',
+					'parameters': [
+			          {
+			            'name': 'id',
+			            'in': 'path',
+			            'description': 'ID of ' + type.Name + ' to fetch',
+			            'required': true,
+			            'type': 'string',
+			            'format': 'string'
+			          }
+			        ],
+					responses: {
+						'200': {
+							description: 'Items deleted.',
+							schema: {
+								$ref: '#/definitions/ResultScalar'
+							}
+						},
+						default: {
+							description: 'error ocurred',
+							schema: {
+								$ref: '#/definitions/Error'
+							}
+						}
+					}
+				}
+		};
 		});
+
+
 
 	// TODO: Add Update
 	// TODO: Add Get/Delete/Update by ID endpoints
