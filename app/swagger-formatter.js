@@ -67,6 +67,17 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 		}
 	};
 
+	SwaggerBuilder.prototype.getDeleteParameters = function() {
+		return [
+		{
+			'name': 'filter',
+			'in': 'query',
+			'description': 'Specifies a filter expression.',
+			'required': false,
+			'type': 'string'
+		}];
+	};
+
 	SwaggerBuilder.prototype.getQueryParameters = function() {
 		return [
 		{
@@ -139,7 +150,9 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 		log('with definitions');
 		var definitions = {};
 		var paths = {};
-		var self = this;
+		var self = this,
+			queryParameters = this.getQueryParameters(),
+			deleteParameters = this.getDeleteParameters();
 
 		_.each(this.types, function(type) {
 			log('for type: ' + type.Name);
@@ -168,7 +181,7 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 					produces: [
 					'application/json'
 					],
-					parameters: self.getQueryParameters(),
+					parameters: queryParameters,
 					responses: {
 						'200': {
 							description: type.Name + ' response',
@@ -218,9 +231,35 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 							}
 						}
 					}
+				},
+				delete: {
+					tags: [
+						type.Name
+					],
+					description: 'Delete from ' + type.Name,
+					operationId: 'delete',
+					parameters: deleteParameters,
+					responses: {
+						'200': {
+							description: 'Items deleted.',
+							schema: {
+								$ref: '#/definitions/ResultScalar'
+							}
+						},
+						default: {
+							description: 'error ocurred',
+							schema: {
+								$ref: '#/definitions/Error'
+							}
+						}
+					}
 				}
 			};
 		});
+
+	// TODO: Add Update
+	// TODO: Add Get/Delete/Update by ID endpoints
+	// TODO: add more detailed descriptions 
 
 		definitions['Error'] = {
 			required: [
@@ -263,6 +302,17 @@ SwaggerBuilder.prototype.withEverliveServer = function() {
 				}
 			}
 		};
+
+		definitions['ResultScalar'] = {
+			required: [
+				'Result'
+			],
+			properties: {
+				Result: {
+					type: 'integer'
+				}
+			}
+		}
 
 		this.swagger.paths = paths;
 		this.swagger.definitions = definitions;
