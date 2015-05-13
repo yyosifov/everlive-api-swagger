@@ -7,7 +7,7 @@ var _ = require('lodash');
 var swaggerFormatter = require('./app/swagger-formatter');
 
 // heroku
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 3000));
 // openshift
 //var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
 //var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
