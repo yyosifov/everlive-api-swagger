@@ -6,8 +6,11 @@ var async = require('async');
 var _ = require('lodash');
 var swaggerFormatter = require('./app/swagger-formatter');
 
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
-var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+// heroku
+app.set('port', (process.env.PORT || 5000));
+// openshift
+//var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;  
+//var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 
 app.use(express.static(__dirname + '/app'));
 
@@ -77,6 +80,10 @@ app.get('/spec/:masterKey/:apiKey', function(req, res) {
 	});
 });
 
-app.listen(port, ip, function() {
-  console.log("Node server running at http://" + ip + ":" + port);
+// openshift
+//app.listen(port, ip, function() {
+
+// heroku
+app.listen(app.get('port'), function() {
+  console.log("Node server running at http://localhost:" + app.get('port'));
 });
