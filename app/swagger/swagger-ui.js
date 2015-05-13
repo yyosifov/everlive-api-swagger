@@ -20606,11 +20606,9 @@ SwaggerUi.Views.HeaderView = Backbone.View.extend({
 
     var apiKey = $('#apiKey').val();
     var masterKey = $('#masterKey').val();
-    
-	var url = 'http://' + window.location.host;
 
     this.trigger('update-swagger-ui', {
-      url: url + '/spec/' + masterKey + '/' + apiKey
+      url: '/spec/' + masterKey + '/' + apiKey
     });
   },
 
