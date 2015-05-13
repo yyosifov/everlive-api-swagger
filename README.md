@@ -6,15 +6,18 @@ This project provides an auto-generated Swagger API reference for your Everlive 
 
 To test this out, use the deployed instance here:
 
-[http://yyosifov-everliveapi.rhcloud.com/](http://yyosifov-everliveapi.rhcloud.com/ "http://yyosifov-everliveapi.rhcloud.com/")
+[http://everlive-api-swagger.herokuapp.com//](http://everlive-api-swagger.herokuapp.com/ "http://everlive-api-swagger.herokuapp.com/")
 
 Enter your api key, master key and click explore.
 
 ## Supported operations
 
-Currently this is the list of all supported operations:
+All operations are currently supported:
 
-- GET
+- GET (Read)
+- POST (Create)
+- PUT (Update)
+- DELETE (Delete)
 
 ## Running the project
 
